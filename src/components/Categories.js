@@ -1,7 +1,9 @@
-function Categories ({ setActiveCategory, categories, activeCategory }) {
+import '../styles/Categories.css'
+
+function Categories ({ setSelectedCategories, categories, selectedCategories }) {
     return (
         <div className='lmj-categories'>
-			<select
+			{/* <select
 				value={activeCategory}
 				onChange={(e) => setActiveCategory(e.target.value)}
 				className='lmj-categories-select'
@@ -12,8 +14,26 @@ function Categories ({ setActiveCategory, categories, activeCategory }) {
 						{cat}
 					</option>
 				))}
-			</select>
-			<button onClick={() => setActiveCategory('')}>Réinitialiser</button>
+			</select> */}
+			<h2>Categories</h2>
+			{categories.map(cat => (
+				<label key={cat}>
+					<input
+						type='checkbox'
+						checked={selectedCategories.includes(cat)}
+						onChange={() => setSelectedCategories(
+							selectedCategories.includes(cat)
+								? selectedCategories.filter(c => c !== cat)
+								: selectedCategories.concat(cat)
+						)}
+					/>
+					{cat}
+				</label>
+			))}
+			<div className='lmj-categories-reset' >
+				<button onClick={() => setSelectedCategories([])}>Réinitialiser</button>
+			</div>
+			
 		</div>
 	)
 }

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Categories from './Categories'
 
 function ShoppingList({ cart, updateCart}) {
-    const [activeCategory, setActiveCategory] = useState('')
+    const [selectedCategories, setSelectedCategories] = useState([])
     /*const categories = [];
     plantList.forEach(plant => {
         if (!categories.includes(plant.category)) {
@@ -17,19 +17,35 @@ function ShoppingList({ cart, updateCart}) {
 			acc.includes(plant.category) ? acc : acc.concat(plant.category),
 		[]
 	)
-    
+
     function addToCart(name, price) {
-        const currentPlantAdded = cart.find((plant) => plant.name === name)
-        if (currentPlantAdded) {
+        const currentPlantRemoved = cart.find((plant) => plant.name === name)
+        if (currentPlantRemoved) {
             const cartFilteredCurrentPlant = cart.filter(
                 (plant) => plant.name !== name
             )
             updateCart([
                 ...cartFilteredCurrentPlant,
-                { name, price, amount: currentPlantAdded.amount + 1 }
+                { name, price, amount: currentPlantRemoved.amount + 1 }
             ])
         } else {
             updateCart([...cart, { name, price, amount: 1 }])
+        }
+    } 
+    function removeFromCart(name) {
+        const currentPlantRemoved = cart.find((plant) => plant.name === name)
+        if (currentPlantRemoved) {
+            const cartFilteredCurrentPlant = cart.filter(
+                (plant) => plant.name !== name
+            )
+            if (currentPlantRemoved.amount === 1) {
+                updateCart(cartFilteredCurrentPlant)
+            } else {
+                updateCart([
+                    ...cartFilteredCurrentPlant,
+                    { name, price: currentPlantRemoved.price, amount: currentPlantRemoved.amount - 1 }
+                ])
+            }
         }
     } 
 
@@ -42,21 +58,23 @@ function ShoppingList({ cart, updateCart}) {
         <div className='lmj-shopping-list'>
             <Categories
 				categories={categories}
-				setActiveCategory={setActiveCategory}
-				activeCategory={activeCategory}
+				setSelectedCategories={setSelectedCategories}
+				selectedCategories={selectedCategories}
 			/>
             <ul className='lmj-plant-list'>
                 {plantList.map(({ id, category, cover, name, water, light, price }) => (
-                    (!activeCategory || activeCategory === category) ? (
+                    (selectedCategories.length === 0 || selectedCategories.includes(category)) ? (
                         <div key={id}>
                             <PlantItem 
                                 cover={cover} 
+                                category={category}
                                 name={name} 
                                 water={water} 
                                 light={light} 
                                 price={price}
                             />
                             <button onClick={() => addToCart(name, price)}>Ajouter</button>
+                            <button onClick={() => removeFromCart(name)}>Retirer</button>
                         </div>
                     ) : null
 				))}
