@@ -1,19 +1,28 @@
+import { useState } from 'react'
 import Banner from './Banner'
 import logo from '../assets/logo.png'
-// import Cart from './Cart'
+import Cart from './Cart'
+import Footer from './Footer'
 import ShoppingList from './ShoppingList'
-import QuestionForm from './QuestionForm'
-				
+import '../styles/Layout.css'
+
 function App() {
+	const [cart, updateCart] = useState([])
+	const [isFooterShown, updateIsFooterShown] = useState(true)
 	return (
 		<div>
 			<Banner>
 				<img src={logo} alt='La maison jungle' className='lmj-logo' />
 				<h1 className='lmj-title'>La maison jungle</h1>
 			</Banner>
-			{/* <Cart /> */}
-			<ShoppingList />
-			<QuestionForm />
+			<div className='lmj-layout-inner'>
+				<Cart cart={cart} updateCart={updateCart} />
+				<ShoppingList cart={cart} updateCart={updateCart} />
+			</div>
+			<button onClick={() => updateIsFooterShown(!isFooterShown)}> 
+				{isFooterShown ? "Cacher !" : "Montrer"}
+			</button>
+			{isFooterShown && <Footer cart={cart}/>}
 		</div>
 	)
 }
